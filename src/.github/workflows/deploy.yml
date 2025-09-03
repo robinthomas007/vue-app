@@ -1,0 +1,49 @@
+name: Build and Deploy Vue App to Azure WebApp
+
+on:
+  push:
+    branches:
+      - main # run workflow on pushes to main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Set up Node.js (adjust version if needed)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm c
+
+      # 4. Build Vue app
+      - name: Build Vue app
+        run: npm run build
+
+      # 5. Upload production-ready files as an artifact (optional)
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vue-dist
+          path: dist
+
+      # 6. Login to Azure
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # 7. Deploy to Azure Web App
+      - name: Deploy to Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: '77robin7' # 👈 replace with your Azure Web App name
+          package: ./dist

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ProductList from '../pages/ProductList.vue'
 import Cart from '../pages/CartPage.vue'
+import ProductList from '@/pages/productList.vue'
 
 const routes = [
   { path: '/', component: ProductList },
